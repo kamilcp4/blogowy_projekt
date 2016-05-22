@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+{% endblock %}
+
+{% block title %}{{ blog.name }}{% endblock %}
+
+{% block optionalMenu %}
+		{% if user_permissions.is_blog_owner %}
+			<li><a href="{% url 'edit_blog' blog.slug %}">Konfiguracja</a></li>
+			{% if user_permissions.can_add_entry %}
+				<li><a href="{% url 'add_blog_entry' blog.slug %}">Dodaj wpis</a></li>
+			{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+	<h2 class="mainTitle">{{ blog.name }}</h2>
+	<div class="underlineTitle"></div>
+	<div class="entriesContainer">
+		<div class="allEntries">
+			{% for blog_entry in blog_entries %}
+			<div class="entryContainer">
+				<a href="{% url 'blog_entry' blog.slug blog_entry.id blog_entry.slug %}">
+					{% if blog_entry.first_picture_url %}
+						<img src="/media/{{ blog_entry.first_picture_url }}" class="entryContainerPhoto">
+					{% endif %}
+					<div class="entryContainerTitle">{{ blog_entry.title }}</div>
+				</a>
+
+				<div class="entryContainerSummary">{{ blog_entry.summary }}</div>
+				<div class="entryContainerDate">{{ blog_entry.created_at }}</div>
+
+				{% if not blog_entry.is_active%}
+					<a href="{% url 'blog_entry' blog.slug blog_entry.id blog_entry.slug %}">
+						<div class="smallArchiveEntry">
+							<div class="badStatusText">Archiwalny</div>
+						</div>
+					</a>
+				{% elif blog_entry.status == blog_entry_states.rejected %}
+					<a href="{% url 'blog_entry' blog.slug blog_entry.id blog_entry.slug %}">
+						<div class="smallRejectedEntry">
+							<div class="badStatusText">Zablokowany</div>
+						</div>
+					</a>
+				{% endif %}
+
+				{% if user_permissions.can_add_entry and blog_entry.is_active %}
+					<div>
+						<a class="editButton" href="{% url 'edit_blog_entry' blog.slug blog_entry.id blog_entry.slug %}">Edytuj wpis</a>
+					</div>
+					<div>
+						<a href="" class="js-archive_entry archiveButton" data-blog-entry-id="{{ blog_entry.id }}">Archiwizuj wpis</a>				</a>
+					</div>
+				{% endif %}
+
+			</div>
+			{% endfor %}
+
+			<div class="separate"></div>
+
+			<center>
+			{% if pagination_page.paginator.num_pages > 1 %}
+				{% if pagination_page.has_previous %}
+					<a class="paginationString" href="?strona={{ pagination_page.previous_page_number }}" >&laquo; poprzednia</a>
+				{% else %}
+					<span class="paginationString">&laquo; poprzednia</span>
+				{% endif %}
+
+				<span class="paginationString">|</span>
+
+				{% if pagination_page.has_next %}
+					<a class="paginationString" href="?strona={{ pagination_page.next_page_number }}" >następna strona &raquo;</a>
+				{% else %}
+					<span class="paginationString">następna strona &raquo;</span>
+				{% endif %}
+			{% endif %}
+			</center>
+
+			<div class="separate"></div>
+
+		</div>
+	</div>
+
+	<div class="blogInformationContainer">
+		<div class="smallTitle">Blog</div>
+
+		<div class="blogInformation">
+			{% if blog.status == moderation_states.private %}
+				<div class="smallRejectedEntry">
+					<div class="badBlogStatusText">Blog jeszcze nieaktywowany i widoczny tylko prywatnie</div>
+				</div>
+			{% elif blog.status == moderation_states.rejected or not blog.is_active %}
+				<div class="smallArchiveEntry">
+					<div class="badBlogStatusText">Blog zablokowany i widoczny tylko prywatnie.</div>
+				</div>
+			{% endif %}
+			<div><img class="entryContainerPhoto" src="/media/{{ blog.headline_picture_url }}"></div>
+			<img class="bloggerAvatar" src="/media/{{ blog.avatar_url }}">
+			<div class="bloggerName">{{ blog.bloger.username }}</div>
+			<div class="blogDescription" style="clear: both;">{{ blog.description }}</div>
+		</div>
+
+	</div>
+
+	{% load compress %}
+	{% load staticfiles %}
+
+	{% compress js %}
+		<script type="text/coffeescript" src="{% static 'js/blogs/archive_entry.coffee' %}"></script>
+	{% endcompress %}
+
+{% endblock %}

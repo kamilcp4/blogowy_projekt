@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/edit.css' %}" />
+{% endblock %}
+
+{% block content %}
+	<h2 class="mainTitle">Mój blog</h2>
+	<div class="underlineTitle"></div>
+	<div class="loginBox">
+		{% if request.user.is_anonymous %}
+			<div class="staticTextForm">
+				<a href="{% url 'login' %}?next={{ request.path_info }}"> Aby założyć bloga musisz się zalogować.</a>
+			</div>
+		{% else %}
+			{% if can_add_blog %}
+				<div>
+					<form method="post">
+						<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+						<div>
+							<div class="label">Nazwa</div>
+							<input style="width:200px;" class="smallText" id="id_name" type="text" placeholder="Nazwa bloga" name="name" value="{{ add_blog_form.name.value|default_if_none:'' }}" autofocus>
+							{% for error in add_blog_form.name.errors %}
+								<span>{{ error }}</span>
+							{% endfor %}
+							<div style="clear:both;"></div>
+						</div>
+
+						<div>
+							<div class="label">Akceptuję <a href="{% url 'statute' %}">regulamin</a></div>
+							<input class="statuteCheckbox" id="id_accept_tos" type="checkbox" name="accept_tos">
+							{% for error in add_blog_form.accept_tos.errors %}
+								<span>{{ error }}</span>
+							{% endfor %}
+							<div style="clear:both;"></div>
+						</div>
+
+						<div>
+							{% for error in add_blog_form.non_field_errors %}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+
+						<div><button class="commentSubmit" type="submit">Dodaj blog</button></div>
+					</form>
+				</div>
+			{% else %}
+				<div>
+					{% if blog.status == moderation_states.rejected or not blog.is_active %}
+						<div class="staticTextForm"> Twój blog został zablokowany!</div>
+					{% else %}
+						<div class="staticTextForm"> Twój blog nie został jeszcze aktywowany.</div>
+					{% endif %}
+					<div style="clear:both;"></div>
+					<div style="clear:both;" class="staticTextForm"><a href="{% url 'blog' blog.slug %}">Przejdź do bloga.</a></div>
+					<div style="clear:both;"></div>
+				</div>
+			{% endif %}
+		{% endif %}
+	</div>
+{% endblock %}

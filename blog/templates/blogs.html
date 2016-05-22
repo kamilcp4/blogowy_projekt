@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+
+{% endblock %}
+
+{% block title %}Blogi{% endblock %}
+
+{% block content %}
+	<h2 class="mainTitle">Najnowsze wpisy</h2>
+	<div class="underlineTitle"></div>
+	<div class="entriesContainer">
+		<div class="allEntries">
+			{% for blog_entry in blog_entries %}
+				<div class="entryContainer">
+					<a href="{% url 'blog_entry' blog_entry.blog.slug blog_entry.id blog_entry.slug %}">
+						{% if blog_entry.first_picture_url %}
+							<img src="/media/{{ blog_entry.first_picture_url }}" class="entryContainerPhoto">
+						{% endif %}
+
+						{% if blog_entry.is_recommended %}
+							<strong>
+								<div class="entryContainerTitle">{{ blog_entry.title }}</div>
+							</strong>
+						{% else %}
+							<div class="entryContainerTitle">{{ blog_entry.title }}</div>
+						{% endif %}
+					</a>
+					<div class="entryContainerSummary">{{ blog_entry.summary }}</div>
+					<div class="entryContainerDate">{{ blog_entry.created_at }}</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="separate"></div>
+
+		{% if pagination_page.paginator.num_pages > 1 %}
+			{% if pagination_page.has_previous %}
+				<a class="paginationString" href="?strona={{ pagination_page.previous_page_number }}" >&laquo; poprzednia</a>
+			{% else %}
+				<span class="paginationString">&laquo; poprzednia</span>
+			{% endif %}
+
+			<span class="paginationString">|</span>
+
+			{% if pagination_page.has_next %}
+				<a class="paginationString" href="?strona={{ pagination_page.next_page_number }}" >następna strona &raquo;</a>
+			{% else %}
+				<span class="paginationString">następna strona &raquo;</span>
+			{% endif %}
+		{% endif %}
+	</div>
+
+	<div class="popularEntriesContainer">
+		<div class="smallTitle">Najpopularniejsze</div>
+		{% for popular_entry in most_popular %}
+			<div class="entryContainer" style="text-align: left;">
+				<a href="{% url 'blog_entry' popular_entry.blog.slug popular_entry.id popular_entry.slug %}">
+					{% if popular_entry.first_picture_url %}
+						<img src="/media/{{ popular_entry.first_picture_url }}" class="entryContainerPhoto">
+					{% endif %}
+					<div class="entryContainerTitle">{{ popular_entry.title }}</div>
+				</a>
+				<div class="entryContainerSummary">{{ popular_entry.summary }}</div>
+				{% load humanize %}
+				<div class="entryContainerDate">{{ popular_entry.updated_at|naturaltime }}</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	<div class="separate"></div>
+
+	<div class="searchContainer">
+		<div class="mainTitle">Wyszukiwarka blogów</div>
+		<div class="underlineTitle"></div>
+		<input placeholder="Szukaj..." type="text" maxlength="150" class="js-find-blogs inputBlog">
+		<div class="js-search-container standardHeight"></div>
+		<div class="js-paginate paginateBlogs"></div>
+	</div>
+
+	{% load compress %}
+	{% load staticfiles %}
+	{% compress js %}
+		<script type="text/coffeescript" src="{% static 'js/blogs/load_blogs.coffee' %}"></script>
+	{% endcompress %}
+	<script>
+		showBlogs({{ blogs_data|safe }}, {{ max_blogs_on_page }})
+	</script>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/edit.css' %}" />
+{% endblock %}
+
+{% block content %}
+	<div>
+		<h2 class="mainTitle">{% if is_edited %}Konfiguracja{% else %}Skonfiguruj pozostałe ustawienia{% endif %}</h2>
+		<div class="underlineTitle"></div>
+
+		<form method="post">
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+			<div>
+				<div class="label">Nazwa</div>
+				{% if is_edited %}
+				<input class="smallText" id="id_name" type="text" name="name" value="{{ configure_blog_form.name.value }}">
+				{% else %}
+					<div class="staticTextForm">{{ blog.name }}</div>
+					<input class="smallText" id="id_name" type="hidden" name="name" value="{{ configure_blog_form.name.value }}">
+				{% endif %}
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Slug </div>
+				<div class="staticTextForm">{{ blog.slug }}</div>
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Opis</div>
+				<textarea class="smallText" rows="4" id="id_description" type="text" name="description">{% if is_edited %}{{ configure_blog_form.description.value|default_if_none:'' }}{% endif %}</textarea>
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Avatar</div>
+				<div>
+					<div>
+						<img class="js-avatar-picture-preview bloggerAvatar" src="/media/{{ configure_blog_form.avatar_url.value }}">
+					</div>
+					<div style="clear:both;"></div>
+					<div class="label">Zmień</div>
+					<input class="js-avatar-picture-input filesButton" type="file">
+					<input id="id_avatar_url" type="hidden" class="js-new-avatar-picture-url" name="avatar_url" value="{{ configure_blog_form.avatar_url.value }}">
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Grafika nagłówka</div>
+				<div>
+					<div>
+						<img src="/media/{{ configure_blog_form.headline_picture_url.value }}" class="js-headline-picture-preview headlinePhoto">
+					</div>
+					<div style="clear:both;"></div>
+					<div class="label">Zmień</div>
+					<input class="js-headline-picture-input filesButton" type="file">
+					<input id="id_headline_picture_url" type="hidden" class="js-new-headline-picture-url" name="headline_picture_url" value="{{ configure_blog_form.headline_picture_url.value }}">
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+			<button type="submit" class="commentSubmit">Zapisz</button>
+		</form>
+	</div>
+
+	{% load compress %}
+	{% load staticfiles %}
+
+	{% compress js %}
+		<script type="text/coffeescript" src="{% static 'js/blogs/main_photos.coffee' %}"></script>
+	{% endcompress %}
+
+{% endblock %}

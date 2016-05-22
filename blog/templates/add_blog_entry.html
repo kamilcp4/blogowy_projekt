@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/edit.css' %}" />
+{% endblock %}
+
+{% block content %}
+	{% if is_edited %}
+		<h2 class="mainTitle">Edycja wpisu</h2>
+	{% else %}
+		<h2 class="mainTitle">Dodaj wpis</h2>
+	{% endif %}
+	<div class="underlineTitle"></div>
+	<div>
+		<form method="post" class="js-form addForm" data-blog-entry-id={{ blog_entry_id }}>
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+			<div>
+				<div class="label">Tytuł</div>
+				<input class="smallText" id="id_title" maxlength="200" name="title" type="text" value="{{ form.title.value|default_if_none:'' }}">
+				{% for error in form.title.errors %}
+					<span>{{ error }}</span>
+				{% endfor %}
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Krótki opis</div>
+				<textarea class="smallText" rows="4" id="id_summary" maxlength="400" name="summary">{{ form.summary.value|default_if_none:'' }}</textarea>
+				{% for error in form.summary.errors %}
+					<span>{{ error }}</span>
+				{% endfor %}
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div class="js-markdown-body">
+				<div class="label">Treść</div>
+				<textarea class="smallText js-markdown-text" style="overflow: auto; resize:vertical;" cols="40" id="id_markdown_body" name="markdown_body" rows="20">{{ form.markdown_body.value|default_if_none:'' }}</textarea>
+				{% for error in form.markdown_body.errors %}
+					<span>{{ error }}</span>
+				{% endfor %}
+				<a class="js-show-preview commentSubmit" href="#">Podgląd</a>
+			</div>
+
+			<div class="mainEntryBody js-preview" style="display: none;">
+				<a class="js-edit commentSubmit" href="#">Edytuj</a>
+			</div>
+
+			<div style="clear:both;"></div>
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Dozwolone komentarze</div>
+				<div class="commentCheckbox" >
+					<input {% if form.comments_allowed.value %}checked="checked"{% endif %} id="id_comments_allowed" name="comments_allowed" type="checkbox">
+				</div>
+				{% for error in form.comments_allowed.errors %}
+					<span>{{ error }}</span>
+				{% endfor %}
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div>
+				<div class="label">Multimedia</div>
+				<input class="js-file-upload filesButton" type="file" multiple>
+				<div style="clear:both;"></div>
+				<div class="label" style="width: 100%;">Wczytaj zdjędia, a następnie przeciągnij w wybrane miejsce w tekście.</div>
+				<div style="clear:both;"></div>
+				<div class="js-picture-holder"></div>
+				<div style="clear:both;"></div>
+			</div>
+
+			<div class="underline"></div>
+
+			<div style="display:none;">
+				{{ form.first_picture_url }}
+			</div>
+
+			<div style="display:none;">
+				{{ form.pictures_json }}
+			</div>
+
+			<div class="js-pictures">
+				<button class="commentSubmit" type="submit">Zapisz</button>
+			</div>
+		</form>
+
+	</div>
+	{% load compress %}
+	{% load staticfiles %}
+
+	{% compress js %}
+		<script type="text/coffeescript" src="{% static 'js/blogs/multimedia.coffee' %}"></script>
+	{% endcompress %}
+
+	{% if is_edited %}
+		<script>
+			loadPicture()
+		</script>
+	{% endif %}
+{% endblock %}

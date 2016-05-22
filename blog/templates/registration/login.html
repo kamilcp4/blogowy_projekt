@@ -1,0 +1,81 @@
+{% extends "base.html"%}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/edit.css' %}" />
+{% endblock %}
+
+{% block title %}Logowanie{% endblock %}
+
+{% block content%}
+	<h2 class="mainTitle">Logowanie</h2>
+	<div class="underlineTitle"></div>
+		<div class="loginBox">
+			<form method="post" action=".">
+				{% csrf_token %}
+				<div>
+					<div>
+						<div class="label" for="id_username">Użytkownik:</div>
+						<input style="width:200px;" class="smallText" id="id_username" maxlength="254" name="username" type="text">
+						{% for error in form.username.errors %}
+							<span>{{ error }}</span>
+						{% endfor %}
+						<div style="clear:both;"></div>
+					</div>
+
+					<div>
+						<div class="label" for="id_password">Hasło:</div>
+						<input style="width:200px;" class="smallText" id="id_password" name="password" type="password">
+						{% for error in form.password.errors %}
+							<span>{{ error }}</span>
+						{% endfor %}
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+    			<input type="hidden" name="next" value="{{ next|escape }}">
+				<input style="float:right; margin-right:10px;" class="commentSubmit" type="submit" value="Logowanie">
+				<input style="float:right; margin-right:10px;" class="commentSubmit" type="reset" value="Wyczyść">
+			</form>
+			<div style="clear:both;"></div>
+		</div>
+
+	<h2 class="mainTitle">Rejestracja</h2>
+	<div class="underlineTitle"></div>
+		<div class="loginBox">
+			<form method="post" action="{% url 'registration' %}">
+				{% csrf_token %}
+				<div>
+					<div>
+						<div class="label">Login:</div>
+						<input style="width:200px;" class="smallText" id="id_username" maxlength="254" name="username" type="text">
+						<div style="clear:both;"></div>
+					</div>
+
+					<div>
+						<div class="label">E-mail:</div>
+						<input style="width:200px;" class="smallText" id="id_email" maxlength="254" name="email" type="email">
+						<div style="clear:both;"></div>
+					</div>
+
+					<div>
+						<div class="label">Hasło:</div>
+						<input style="width:200px;" class="smallText" id="id_password" name="password" type="password">
+						<div style="clear:both;"></div>
+					</div>
+
+					<div>
+						<div class="label">Powtórz:</div>
+						<input style="width:200px;" class="smallText" id="id_password_2" name="password_2" type="password">
+						<div style="clear:both;"></div>
+					</div>
+
+				</div>
+				<input style="float:right; margin-right:10px;" class="commentSubmit" type="submit" value="Zarejestruj">
+				<input style="float:right; margin-right:10px;" class="commentSubmit" type="reset" value="Wyczyść">
+			</form>
+			<div style="clear:both;"></div>
+		</div>
+{% endblock %}

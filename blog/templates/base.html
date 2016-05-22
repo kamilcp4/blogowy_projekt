@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %}</title>
+
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/base.css' %}" />
+	{% block styles %}
+	{% endblock %}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+	<ul>
+		<li><a href="{% url 'add_blog' %}">Mój blog</a></li>
+		<li><a href="/">Najnowsze wpisy</a></li>
+		<li><a href="{% url 'statute' %}">Regulamin</a></li>
+		<li style="float: right;">
+			{% if not request.user.is_authenticated %}
+				<a href="{% url 'login' %}?next={{ request.path_info }}">Zaloguj się</a>
+			{% else %}
+				<a href="/logout/"> {{ request.user.username }}
+					<img class="shutdownIcon" src="{% static 'icons/shutdown.png' %}" />
+				</a>
+			{% endif %}
+		</li>
+		{% block optionalMenu %}
+		{% endblock %}
+	</ul>
+
+	<center>
+		<div class="mainContainer">
+			<div class="firstSeparate"><br></div>
+			{% block content %}
+			{% endblock %}
+		</div>
+	</center>
+
+	<div class="footer">
+
+	</div>
+</body>
+</html>

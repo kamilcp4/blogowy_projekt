@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block styles %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/entries_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/page_decoration.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/blog_box.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/blogs/photos.css' %}" />
+{% endblock %}
+
+{% block title %}{{blog_entry.title}}{% endblock %}
+
+{% block optionalMenu %}
+	{% if user_permissions.can_add_entry and blog_entry.is_active %}
+		<li>
+			<a href="{% url 'edit_blog_entry' blog.slug blog_entry.id blog_entry.slug %}">Edytuj wpis</a>
+		</li>
+		<li>
+			<a href="" class="js-archive_entry" data-blog-entry-id="{{ blog_entry.id }}">Archiwizuj wpis</a>
+		</li>
+	{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+	<h2 class="mainTitle">{{ blog_entry.blog.name }}</h2>
+	<div class="underlineTitle"></div>
+	<div class="mainEntryBox">
+		<div class="mainEntryTitle">{{ blog_entry.title }}</div>
+		{% if blog_entry.first_picture_url %}
+				<img src="/media/{{ blog_entry.first_picture_url }}" class="mainEntryPicture">
+		{% endif %}
+		<div style="margin-top: 15px;" class="commentDate">Utworzony: {{ blog_entry.created_at }}</div>
+		<div style="clear:both;"></div>
+		<div class="commentDate">Edytowany: {{ blog_entry.updated_at }}</div>
+		<div style="clear:both;"></div>
+		<div class="mainEntrySummary">{{ blog_entry.summary|linebreaksbr }}</div>
+		<div class="mainEntryBody">{{ blog_entry.body|safe|linebreaks }}</div>
+	</div>
+
+	<div class="blogInformationContainer js-blog-information-container">
+		<div class="smallTitle">Blog</div>
+
+		<div class="blogInformation">
+			{% if blog.status == moderation_states.private %}
+				<div class="smallRejectedEntry">
+					<div class="badBlogStatusText">Blog jeszcze nieaktywowany i widoczny tylko prywatnie</div>
+				</div>
+			{% elif blog.status == moderation_states.rejected or not blog.is_active %}
+				<div class="smallArchiveEntry">
+					<div class="badBlogStatusText">Blog zablokowany i widoczny tylko prywatnie.</div>
+				</div>
+			{% endif %}
+			<div><img class="entryContainerPhoto" src="/media/{{ blog.headline_picture_url }}"></div>
+			<img class="bloggerAvatar" src="/media/{{ blog.avatar_url }}">
+			<div class="bloggerName">{{ blog.bloger.username }}</div>
+			<div class="blogDescription" style="clear: both;">{{ blog.description }}</div>
+		</div>
+	</div>
+
+	<div class="blogInformationContainer js-related-container" style="overflow: hidden;">
+		<div class="smallTitle">Zobacz również</div>
+
+		{% for blog_entry in related %}
+			<div class="entryContainer" style="float: left;">
+				<a href="{% url 'blog_entry' blog.slug blog_entry.id blog_entry.slug %}">
+					{% if blog_entry.first_picture_url %}
+						<img src="/media/{{ blog_entry.first_picture_url }}" class="entryContainerPhoto">
+					{% endif %}
+					<div class="entryContainerTitle" style="max-width:280px;">{{ blog_entry.title }}</div>
+				</a>
+				<div class="entryContainerSummary">{{ blog_entry.summary }}</div>
+				<div class="entryContainerDate">{{ blog_entry.created_at }}</div>
+			</div>
+			{% endfor %}
+	</div>
+
+	<div class="separate"></div>
+
+	{% if pictures %}
+		<h2 class="mainTitle">Galeria</h2>
+		<div class="underlineTitle"></div>
+		<div class="photosBox">
+			{% for url, title in pictures %}
+				<a href="/media/{{ url }}">
+					<img class="picture_icon" src="/media/{{ url }}">
+				</a>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	<div class="separate"></div>
+
+	{% if blog_entry.comments_allowed %}
+		<div class="commentsContainer">
+			<h2 class="mainTitle">Komentarze</h2>
+			<div class="underlineTitle"></div>
+
+			<div>
+				<form method="post">
+					<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+					<textarea class="commentTextArea" cols="40" id="id_body" name="body" rows="10"></textarea>
+					{% for error in form.title.errors %}
+						<span>{{ error }}</span>
+					{% endfor %}
+					<button class="commentSubmit" type="submit">Publikuj</button>
+				</form>
+			</div>
+
+			{% for comment in comments %}
+				<div class="commentBox">
+					<div class="commentAuthor">{{ comment.author }}</div>
+					<div class="commentDate">{{ comment.created_at }}</div>
+					<div class="commentBody">{{ comment.body }}</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	{% load compress %}
+	{% load staticfiles %}
+
+	{% compress js %}
+		<script type="text/coffeescript" src="{% static 'js/blogs/archive_entry.coffee' %}"></script>
+		<script type="text/coffeescript" src="{% static 'js/blogs/related.coffee' %}"></script>
+	{% endcompress %}
+
+{% endblock %}
