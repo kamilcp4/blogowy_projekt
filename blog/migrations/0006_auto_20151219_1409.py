@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import django.utils.timezone
+import jsonfield.fields
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('blog', '0005_auto_20151219_1312'),
+    ]
+
+    operations = [
+        migrations.RemoveField(
+            model_name='photo',
+            name='blog_entry',
+        ),
+        migrations.RemoveField(
+            model_name='photo',
+            name='photo',
+        ),
+        migrations.RemoveField(
+            model_name='photo',
+            name='title',
+        ),
+        migrations.AddField(
+            model_name='blogentry',
+            name='pictures_json',
+            field=jsonfield.fields.JSONField(default=[], null=True, blank=True),
+        ),
+        migrations.AddField(
+            model_name='photo',
+            name='picture',
+            field=models.ImageField(upload_to=b''),
+            preserve_default=False,
+        ),
+    ]
