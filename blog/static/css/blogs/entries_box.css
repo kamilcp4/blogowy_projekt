@@ -1,0 +1,95 @@
+@font-face {
+	font-family: PT-Sans;
+	src: url("../fonts/PT-Sans/PTC55F.ttf");
+}
+
+@font-face {
+	font-family: PT-Serif;
+	src: url("../fonts/pt-serif/PTF55F.ttf");
+}
+
+@font-face {
+	font-family: GreatVibes;
+	src: url("../fonts/great-vibes/GreatVibes-Regular.otf");
+}
+
+@font-face {
+	font-family: PT-Serif;
+	font-weight: bold;
+	src: url("../fonts/pt-serif/PTF75F.ttf");
+}
+
+.allEntries{
+    text-align: left;
+}
+
+.entryContainer{
+    margin-top: 15px;
+    margin-left: 15px;
+    display: inline-block;
+    padding: 0px;
+	text-decoration: none;
+	font-family: 'PT-Sans';
+	width: 280px;
+	height: 290px;
+	background-color: #FFFFFF;
+	box-shadow: 1px 1px 6px 0 rgba(0,0,0,0.25);
+	-moz-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	-webkit-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	vertical-align:top;
+	position: relative;
+	overflow: hidden;
+}
+
+.entryContainerPhoto{
+    width: 100%;
+    height: 150px;
+    margin: 0;
+    padding: 0;
+}
+
+.entryContainerTitle{
+    font-size: 17px;
+    text-decoration: none;
+    padding: 5px;
+    text-align: left;
+    text-overflow: ellipsis;
+    max-height: 38px;
+    overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    max-width: 190px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.entryContainerSummary{
+    display: block;
+    display: -webkit-box;
+    max-width: 270px;
+    margin: 0 auto;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+    height: 42px;
+    font-size: 12px;
+    font-family: 'PT-Serif';
+    padding: 5px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.entryContainerDate{
+    font-size: 12px;
+    font-family: 'PT-Sans';
+    position:absolute;
+    bottom:5px;
+    right:5px;
+}
+
+.paginationString{
+    font-size: 18px;
+    font-family: 'PT-Sans';
+    font-weight: 400;
+}

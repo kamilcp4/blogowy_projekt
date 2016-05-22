@@ -1,0 +1,111 @@
+.addForm{
+    width: 800px;
+    text-align: left;
+}
+
+.label{
+    overflow: hidden;
+    font: 400 20px "PT-Sans",Georgia,serif;
+    color: #333;
+    width: 150px;
+    margin-top: 10px;
+    padding: 5px;
+    float: left;
+}
+
+.smallText{
+    overflow: hidden;
+    font: 400 20px "PT-Serif",Georgia,serif;
+    color: #333;
+    width: 600px;
+    margin-top: 10px;
+    padding: 5px;
+    float: left;
+}
+
+.commentCheckbox{
+    float: left;
+    margin-top: 25px;
+}
+
+.statuteCheckbox{
+    float: left;
+    margin-top: 35px;
+}
+
+.filesButton{
+    float: left;
+    margin-top: 15px;
+}
+
+.miniPhotoBox{
+    margin-top: 15px;
+    margin-left: 15px;
+    display: inline-block;
+    padding: 0px;
+	width: 200px;
+	background-color: #FFFFFF;
+	box-shadow: 1px 1px 6px 0 rgba(0,0,0,0.25);
+	-moz-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	-webkit-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	position: relative;
+	text-align:center;
+	padding: 5px;
+}
+
+.miniPhoto{
+    width:180px;
+    height: 150px;
+}
+
+.miniMainPhoto{
+    font: 600 15px "PT-Serif",Georgia,serif;
+    color: #333;
+    float: left;
+}
+
+.miniMainCheckbox{
+    float: left;
+}
+
+.miniPhotoTitle{
+    margin-top: 5px;
+    width: 190px;
+    font: 600 15px "PT-Serif",Georgia,serif;
+    color: #333;
+}
+
+.headlinePhoto{
+    width: 300px;
+    height: 150px;
+    float: left;
+}
+
+.loginBox{
+    margin-top: 15px;
+    margin-left: 15px;
+    display: block;
+    padding: 0px;
+	width: 420px;
+	background-color: #FFFFFF;
+	box-shadow: 1px 1px 6px 0 rgba(0,0,0,0.25);
+	-moz-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	-webkit-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	position: relative;
+}
+
+.underline{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    border-bottom: 1px solid rgb(163, 163, 163);
+}
+
+.staticTextForm{
+    overflow: hidden;
+    font: 400 20px "PT-Sans",Georgia,serif;
+    color: #333;
+    margin-top: 10px;
+    padding: 5px;
+    float: left;
+}

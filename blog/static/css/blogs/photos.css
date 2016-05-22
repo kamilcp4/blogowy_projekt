@@ -1,0 +1,40 @@
+@font-face {
+	font-family: PT-Sans;
+	src: url("../fonts/PT-Sans/PTC55F.ttf");
+}
+
+.picture_icon{
+	margin: 0;
+	padding: 0;
+	width: 200px;
+	margin: 15px;
+	display: inline-block;
+	border: 1px, solid, #CCC;
+}
+
+.title_label{
+	margin: 0;
+	padding: 0;
+	margin-top: 5px;
+	width: 200px;
+	height: 20px;
+	display: block;
+	text-align: center;
+	font-family: 'PT-Sans';
+}
+
+.photosBox{
+    clear: both;
+    margin-top: 15px;
+    margin-left: 15px;
+    padding: 0px;
+	text-decoration: none;
+	font-family: 'PT-Sans';
+	width: 1150px;
+	background-color: #FFFFFF;
+	box-shadow: 1px 1px 6px 0 rgba(0,0,0,0.25);
+	-moz-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	-webkit-box-shadow:1px 1px 6px 0 rgba(0,0,0,0.25);
+	padding: 10px;
+	vertical-align:top;
+}
