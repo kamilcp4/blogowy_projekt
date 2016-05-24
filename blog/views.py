@@ -20,7 +20,7 @@ from .forms import AddBlogForm, ConfigureBlogForm, EditBlogEntryForm, \
 from .helpers import UserPermissions, get_key
 from .models import Blog, BlogEntry, Photo, Comments
 
-from projekt_indywidualny.settings import MAX_BLOGS_ON_PAGE, \
+from blogowy_projekt.settings import MAX_BLOGS_ON_PAGE, \
     MAX_BLOG_ENTRIES_ON_PAGE
 
 
@@ -30,7 +30,7 @@ def logout_page(request):
 
 
 def registration(request):
-    user_form = UserForm(data=request.POST)
+    user_form = UserForm(data=request.POST or None)
     if request.method == 'POST':
         password = request.POST['password']
         repeated_password = request.POST['password_2']
@@ -239,7 +239,7 @@ def add_blog_entry(request, blog_slug):
 
     return {
         'form': add_entry_form,
-        'blog_entry_id': last_blog_entry.id + 1,
+        'blog_entry_id': last_blog_entry.id + 1 if last_blog_entry else 1,
     }
 
 
